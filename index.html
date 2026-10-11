@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#075b67">
+<meta name="description" content="رحلة أبطال الرياضيات: لعبة تفاعلية للأطفال لتعلّم الجمع والطرح والضرب والقسمة مع يامن ويمنى.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="أبطال الرياضيات">
+<title>رحلة أبطال الرياضيات</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="scene">
+  <div class="sun" aria-hidden="true"></div>
+  <div class="cloud c1" aria-hidden="true"></div>
+  <div class="cloud c2" aria-hidden="true"></div>
+  <div class="sea" aria-hidden="true"><div class="wave w1"></div><div class="wave w2"></div></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <img class="brand-icon" src="assets/icon.svg" alt="" width="44" height="44">
+      <span>رحلة أبطال الرياضيات</span>
+    </div>
+    <div class="top-actions">
+      <div class="chip badge" title="مجموع النجوم">⭐ <span id="score">٠</span></div>
+      <button class="chip" id="musicBtn" aria-pressed="false" aria-label="تشغيل أو إيقاف الموسيقى"><span class="ico">🎵</span><span class="lbl">موسيقى</span></button>
+      <button class="chip" id="soundBtn" aria-pressed="true" aria-label="تشغيل أو إيقاف المؤثرات الصوتية"><span class="ico">🔊</span><span class="lbl">مؤثرات</span></button>
+      <button class="chip" id="qrBtn" aria-label="مشاركة اللعبة برمز QR"><span class="ico">▦</span><span class="lbl">QR</span></button>
+      <button class="chip install" id="installBtn" hidden><span class="ico">⬇️</span><span class="lbl">تثبيت</span></button>
+    </div>
+  </header>
+
+  <main class="game-wrap">
+    <section id="welcome" class="screen active">
+      <div class="intro">
+        <span class="eyebrow">🏝️ مغامرة المعرفة تبدأ هنا</span>
+        <h1>أهلاً بالأبطال!</h1>
+        <p>اختر شخصيتك وانطلق في رحلة مليئة بالألغاز والكنوز</p>
+      </div>
+      <div class="heroes" role="radiogroup" aria-label="اختر شخصيتك">
+        <button class="hero-card" data-hero="yamen" role="radio" aria-checked="false">
+          <span class="hero-say">أنا يامن، هيّا نبحر!</span>
+          <span class="hero-figure"></span>
+          <strong>يامن</strong>
+          <small>مستكشف شجاع 🧭</small>
+        </button>
+        <button class="hero-card" data-hero="yumna" role="radio" aria-checked="false">
+          <span class="hero-say">أنا يمنى، هيّا نبحر!</span>
+          <span class="hero-figure"></span>
+          <strong>يمنى</strong>
+          <small>ذكية ومبدعة 🌟</small>
+        </button>
+      </div>
+      <div class="center">
+        <p class="pick-hint" id="pickHint" aria-live="polite">من سيقود السفينة اليوم؟</p>
+        <button class="primary" id="startBtn">هيّا نبدأ! <span aria-hidden="true">←</span></button>
+      </div>
+    </section>
+
+    <section id="islands" class="screen">
+      <button class="back" id="backWelcome"><span aria-hidden="true">→</span> تغيير الشخصية</button>
+      <div class="island-head">
+        <div class="guide">
+          <span class="hero-figure small" id="guideFig"></span>
+          <span class="bubble" id="helloLabel">يا هلا!</span>
+        </div>
+        <h1>إلى أين نبحر اليوم؟</h1>
+        <p>اختر جزيرتك، وكل إجابة صحيحة تقرّبك من الكنز!</p>
+      </div>
+      <div class="island-grid" id="islandGrid"></div>
+    </section>
+
+    <section id="game" class="screen">
+      <button class="back" id="backIslands"><span aria-hidden="true">→</span> العودة إلى الجزر</button>
+      <div class="play">
+        <div class="sidekick">
+          <span class="bubble" id="bubble" aria-live="polite"></span>
+          <span class="hero-figure" id="sidekickFig"></span>
+        </div>
+        <div class="panel game-panel">
+          <span class="island-banner" id="islandName"></span>
+          <div class="progress-row">
+            <span id="qCount">١ / ٥</span>
+            <div class="progress"><i id="progressBar"></i></div>
+            <span>⭐ <span id="sessionScore">٠</span></span>
+          </div>
+          <div class="question" id="question">؟</div>
+          <div class="answers" id="answers"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="ship-scene" id="shipScene" aria-hidden="true">
+  <div class="sun"></div><div class="cloud c1"></div><div class="cloud c2"></div>
+  <div class="travel-text" id="travelText"></div>
+  <div class="dest" id="destIsland"></div>
+  <div class="ship-track"><div class="ship" id="ship"></div></div>
+  <div class="wave w1"></div><div class="wave w2"></div><div class="wave w3"></div>
+  <button class="skip" id="skipTravel">تخطّي ⏭</button>
+</div>
+
+<div class="modal" id="qrModal" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+  <div class="modal-card">
+    <h2 id="qrTitle">📱 العبها من جوالك!</h2>
+    <p id="qrMessage">امسح الرمز لفتح اللعبة مباشرة.</p>
+    <div class="qr-box" id="qrBox"></div>
+    <div class="center">
+      <button class="primary" id="copyLink">نسخ رابط اللعبة</button>
+      <button class="back" id="closeQr">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+  <div class="modal-card">
+    <span class="hero-figure result-fig" id="resultFig"></span>
+    <h2 id="resultTitle"></h2>
+    <p id="resultText"></p>
+    <div class="score-stars" id="resultStars"></div>
+    <div class="center">
+      <button class="primary" id="resultBtn">جزيرة أخرى ⛵</button>
+      <button class="back" id="retryBtn">أعد المحاولة</button>
+    </div>
+  </div>
+</div>
+
+<div class="confetti" id="confetti" aria-hidden="true"></div>
+<audio id="bgm" src="assets/sound.mp3" loop preload="none"></audio>
+
+<script src="assets/qrcode.js" defer></script>
+<script src="assets/script.js" defer></script>
+</body>
+</html>

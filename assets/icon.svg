@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6fd0e0"/>
+      <stop offset="1" stop-color="#d7f4e9"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#sky)"/>
+  <circle cx="150" cy="150" r="58" fill="#ffe693"/>
+  <circle cx="150" cy="150" r="82" fill="#ffe693" opacity=".3"/>
+  <!-- boat -->
+  <path d="M268 112V330" stroke="#7a4a2a" stroke-width="14" stroke-linecap="round"/>
+  <path d="M268 112L220 126L268 142Z" fill="#c62f3a"/>
+  <path d="M280 134Q384 196 392 318L280 318Z" fill="#fff6dc"/>
+  <path d="M256 160Q196 224 184 318L256 318Z" fill="#ffd264"/>
+  <path d="M316 262h44M338 240v44" stroke="#ff7c67" stroke-width="16" stroke-linecap="round"/>
+  <path d="M124 336H388Q376 398 330 402H186Q136 398 124 336Z" fill="#9a5b34"/>
+  <rect x="116" y="326" width="280" height="18" rx="9" fill="#c17c46"/>
+  <!-- sea -->
+  <path d="M0 392Q32 368 64 392T128 392T192 392T256 392T320 392T384 392T448 392T512 392V512H0Z" fill="#2fa9ab"/>
+  <path d="M0 436Q32 414 64 436T128 436T192 436T256 436T320 436T384 436T448 436T512 436V512H0Z" fill="#075b67"/>
+</svg>

@@ -1,0 +1,19 @@
+{
+  "name": "رحلة أبطال الرياضيات",
+  "short_name": "أبطال الرياضيات",
+  "description": "لعبة تفاعلية للأطفال لتعلّم الجمع والطرح والضرب والقسمة مع يامن ويمنى.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#8ed9e4",
+  "theme_color": "#075b67",
+  "categories": ["education", "games", "kids"],
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
