@@ -1,4 +1,4 @@
-const CACHE = 'math-islands-v2';
+const CACHE = 'math-islands-v3';
 const CORE = [
   './',
   'index.html',
@@ -12,10 +12,30 @@ const CORE = [
   'assets/favicon-32.png',
   'assets/apple-touch-icon.png'
 ];
+// Nice to have offline, but never worth failing the install over.
+const EXTRAS = ['assets/sound.mp3'];
+const FONT_CSS = 'https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&display=swap';
 
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));
+  event.waitUntil(
+    caches.open(CACHE)
+      .then(async cache => {
+        await cache.addAll(CORE);
+        await Promise.all([...EXTRAS.map(url => cache.add(url)), precacheFonts(cache)].map(p => p.catch(() => {})));
+      })
+      .then(() => self.skipWaiting())
+  );
 });
+
+// The first visit loads the font before this worker controls the page, so
+// fetch the stylesheet and the font files it points to here.
+async function precacheFonts(cache) {
+  const res = await fetch(FONT_CSS);
+  if (!res.ok) return;
+  const urls = (await res.clone().text()).match(/https:\/\/fonts\.gstatic\.com\/[^)'"\s]+/g) || [];
+  await cache.put(FONT_CSS, res);
+  await Promise.all([...new Set(urls)].map(url => cache.add(url)));
+}
 
 self.addEventListener('activate', event => {
   event.waitUntil(

@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
 <meta name="theme-color" content="#075b67">
 <meta name="description" content="رحلة أبطال الرياضيات: لعبة تفاعلية للأطفال لتعلّم الجمع والطرح والضرب والقسمة مع يامن ويمنى.">
 <meta name="mobile-web-app-capable" content="yes">
@@ -32,7 +33,7 @@
       <span>رحلة أبطال الرياضيات</span>
     </div>
     <div class="top-actions">
-      <div class="chip badge" title="مجموع النجوم">⭐ <span id="score">٠</span></div>
+      <div class="chip badge" title="مجموع النجوم">⭐ <span id="score">0</span></div>
       <button class="chip" id="musicBtn" aria-pressed="false" aria-label="تشغيل أو إيقاف الموسيقى"><span class="ico">🎵</span><span class="lbl">موسيقى</span></button>
       <button class="chip" id="soundBtn" aria-pressed="true" aria-label="تشغيل أو إيقاف المؤثرات الصوتية"><span class="ico">🔊</span><span class="lbl">مؤثرات</span></button>
       <button class="chip" id="qrBtn" aria-label="مشاركة اللعبة برمز QR"><span class="ico">▦</span><span class="lbl">QR</span></button>
@@ -90,11 +91,11 @@
         <div class="panel game-panel">
           <span class="island-banner" id="islandName"></span>
           <div class="progress-row">
-            <span id="qCount">١ / ٥</span>
+            <span id="qCount" dir="ltr">1 / 5</span>
             <div class="progress"><i id="progressBar"></i></div>
-            <span>⭐ <span id="sessionScore">٠</span></span>
+            <span>⭐ <span id="sessionScore">0</span></span>
           </div>
-          <div class="question" id="question">؟</div>
+          <div class="question" id="question" dir="ltr">?</div>
           <div class="answers" id="answers"></div>
         </div>
       </div>
@@ -119,6 +120,20 @@
     <div class="center">
       <button class="primary" id="copyLink">نسخ رابط اللعبة</button>
       <button class="back" id="closeQr">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="iosModal" role="dialog" aria-modal="true" aria-labelledby="iosTitle">
+  <div class="modal-card">
+    <h2 id="iosTitle">⬇️ ثبّت اللعبة على جوالك</h2>
+    <ol class="steps">
+      <li>اضغط زر المشاركة <b>⬆️</b> في المتصفح.</li>
+      <li>اختر <b>«إضافة إلى الشاشة الرئيسية»</b>.</li>
+      <li>اضغط <b>«إضافة»</b> وافتح اللعبة من الأيقونة.</li>
+    </ol>
+    <div class="center">
+      <button class="primary" id="closeIos">فهمت</button>
     </div>
   </div>
 </div>

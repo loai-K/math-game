@@ -4,7 +4,6 @@ const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const rand = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
 const pick = arr => arr[rand(0, arr.length - 1)];
-const arabic = n => String(n).replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
 /* ---------- Saved progress ---------- */
@@ -119,7 +118,7 @@ const ISLANDS = {
   sub: { name: 'جزيرة الطرح', sign: '−', desc: 'حلّ الألغاز بسرعة وذكاء', color: '#5fc3ef' },
   mul: { name: 'جزيرة الضرب', sign: '×', desc: 'اضرب وانطلق نحو القمة', color: '#ff8f76' },
   div: { name: 'جزيرة القسمة', sign: '÷', desc: 'وزّع الكنوز بالتساوي', color: '#a98bf0' },
-  challenge: { name: 'تحدي الأبطال', sign: '★', desc: 'مغامرة تجمع كل الجزر — ٨ أسئلة متنوعة', color: '#f4aa36' }
+  challenge: { name: 'تحدي الأبطال', sign: '★', desc: 'مغامرة تجمع كل الجزر — 8 أسئلة متنوعة', color: '#f4aa36' }
 };
 const OPS = ['add', 'sub', 'mul', 'div'];
 
@@ -170,8 +169,10 @@ const SFX = {
   sail: [[330, 0, 0.25, 'triangle'], [392, 0.2, 0.25, 'triangle'], [494, 0.4, 0.25, 'triangle'], [587, 0.6, 0.4, 'triangle']],
   win: [[523, 0, 0.15], [659, 0.13, 0.15], [784, 0.26, 0.15], [1047, 0.39, 0.4]]
 };
+const BUZZ = { good: 30, bad: [60, 50, 60], win: [40, 60, 40, 60, 120] };
 function sfx(name) {
   if (!state.sfx) return;
+  if (BUZZ[name] && navigator.vibrate) navigator.vibrate(BUZZ[name]);
   try {
     audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
     if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -220,7 +221,7 @@ function show(id) {
   $$('.screen').forEach(x => x.classList.toggle('active', x.id === id));
   scrollTo(0, 0);
 }
-const updateScore = () => { $('#score').textContent = arabic(state.score); };
+const updateScore = () => { $('#score').textContent = state.score; };
 
 /* ---------- Character select ---------- */
 function selectHero(id, greet) {
@@ -330,7 +331,7 @@ function startGame(kind) {
     ? Array.from({ length: 8 }, (_, i) => makeQuestion(OPS[i % 4]))
     : Array.from({ length: 5 }, () => makeQuestion(kind));
   $('#islandName').textContent = `${kind === 'challenge' ? '🏆' : '🏝️'} ${ISLANDS[kind].name}`;
-  $('#sessionScore').textContent = arabic(0);
+  $('#sessionScore').textContent = 0;
   $('#sidekickFig').innerHTML = heroSVG(state.hero);
   setMood($('#sidekickFig'), 'wave', 1600);
   show('game');
@@ -342,15 +343,15 @@ function nextQuestion() {
   if (qIndex >= questions.length) { finish(); return; }
   locked = false;
   const q = questions[qIndex];
-  $('#qCount').textContent = `${arabic(qIndex + 1)} / ${arabic(questions.length)}`;
+  $('#qCount').textContent = `${qIndex + 1} / ${questions.length}`;
   $('#progressBar').style.transform = `scaleX(${qIndex / questions.length})`;
   const box = $('#question');
-  box.textContent = `${arabic(q.a)} ${q.op} ${arabic(q.b)} = ؟`;
+  box.textContent = `${q.a} ${q.op} ${q.b} = ?`;
   box.classList.remove('pop');
   void box.offsetWidth;
   box.classList.add('pop');
   $('#answers').innerHTML = makeOptions(q.ans)
-    .map((n, i) => `<button class="answer" data-value="${n}" style="--i:${i}">${arabic(n)}</button>`).join('');
+    .map((n, i) => `<button class="answer" data-value="${n}" style="--i:${i}">${n}</button>`).join('');
   $$('.answer').forEach(b => { b.onclick = () => answer(b, q); });
   if (qIndex > 0) say(pick(['ما الجواب يا ترى؟ 🤔', 'فكّر جيداً…', 'السؤال التالي!', 'نقترب من الكنز! 🗝️']));
 }
@@ -365,7 +366,7 @@ function answer(btn, q) {
     state.score++;
     save();
     updateScore();
-    $('#sessionScore').textContent = arabic(session);
+    $('#sessionScore').textContent = session;
     $('.badge').classList.remove('bump');
     void $('.badge').offsetWidth;
     $('.badge').classList.add('bump');
@@ -375,7 +376,7 @@ function answer(btn, q) {
   } else {
     btn.classList.add('wrong');
     $$('.answer').forEach(x => { if (Number(x.dataset.value) === q.ans) x.classList.add('correct'); });
-    say(`قريب! الجواب ${arabic(q.ans)} 💪`);
+    say(`قريب! الجواب ${q.ans} 💪`);
     setMood($('#sidekickFig'), 'sad', 1500);
     sfx('bad');
   }
@@ -392,7 +393,7 @@ function finish() {
   $('#resultFig').innerHTML = heroSVG(state.hero);
   setMood($('#resultFig'), stars > 1 ? 'happy' : 'wave');
   $('#resultTitle').textContent = `${stars === 3 ? 'يا سلام' : stars === 2 ? 'أحسنت' : 'محاولة جميلة'} يا ${hero().name}!`;
-  $('#resultText').textContent = `إجاباتك الصحيحة: ${arabic(session)} من ${arabic(total)}. استمر في التدريب لتصبح ${g('بطل', 'بطلة')} الرياضيات!`;
+  $('#resultText').textContent = `إجاباتك الصحيحة: ${session} من ${total}. استمر في التدريب لتصبح ${g('بطل', 'بطلة')} الرياضيات!`;
   $('#resultStars').textContent = starsText(stars);
   $('#resultModal').classList.add('show');
   $('#resultBtn').focus();
@@ -443,7 +444,10 @@ $('#qrBtn').onclick = () => {
   $('#closeQr').focus();
 };
 $('#closeQr').onclick = () => $('#qrModal').classList.remove('show');
-$('#qrModal').onclick = e => { if (e.target === e.currentTarget) $('#qrModal').classList.remove('show'); };
+$('#closeIos').onclick = () => $('#iosModal').classList.remove('show');
+['#qrModal', '#iosModal'].forEach(id => {
+  $(id).onclick = e => { if (e.target === e.currentTarget) $(id).classList.remove('show'); };
+});
 $('#copyLink').onclick = async () => {
   try {
     await navigator.clipboard.writeText(location.href.split('#')[0]);
@@ -455,6 +459,7 @@ $('#copyLink').onclick = async () => {
 addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   $('#qrModal').classList.remove('show');
+  $('#iosModal').classList.remove('show');
   arrive();
 });
 
@@ -465,7 +470,16 @@ addEventListener('beforeinstallprompt', e => {
   installPrompt = e;
   $('#installBtn').hidden = false;
 });
+// iOS has no install prompt: show the "Add to Home Screen" steps instead
+const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+if (ios && !standalone) $('#installBtn').hidden = false;
 $('#installBtn').onclick = async () => {
+  if (!installPrompt && ios) {
+    $('#iosModal').classList.add('show');
+    $('#closeIos').focus();
+    return;
+  }
   if (!installPrompt) return;
   installPrompt.prompt();
   await installPrompt.userChoice;
