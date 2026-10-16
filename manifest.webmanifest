@@ -1,20 +1,38 @@
 {
+  "id": "./",
   "name": "رحلة أبطال الرياضيات",
   "short_name": "أبطال الرياضيات",
-  "description": "لعبة تفاعلية للأطفال لتعلّم الجمع والطرح والضرب والقسمة مع يامن ويمنى.",
+  "description": "لعبة رياضيات تعليمية مجانية للأطفال: تعلّم الجمع والطرح والضرب والقسمة في رحلة بحرية مع يامن ويمنى. تعمل بدون إنترنت.",
   "lang": "ar",
   "dir": "rtl",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "any",
   "background_color": "#8ed9e4",
   "theme_color": "#075b67",
   "categories": ["education", "games", "kids"],
+  "prefer_related_applications": false,
+  "launch_handler": { "client_mode": "navigate-existing" },
   "icons": [
     { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
     { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "جزيرة الجمع", "short_name": "الجمع", "url": "./?island=add", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] },
+    { "name": "جزيرة الطرح", "short_name": "الطرح", "url": "./?island=sub", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] },
+    { "name": "جزيرة الضرب", "short_name": "الضرب", "url": "./?island=mul", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] },
+    { "name": "جزيرة القسمة", "short_name": "القسمة", "url": "./?island=div", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] },
+    { "name": "تحدي الأبطال", "short_name": "التحدي", "url": "./?island=challenge", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] }
+  ],
+  "screenshots": [
+    { "src": "assets/screenshots/narrow-welcome.webp", "sizes": "1080x1920", "type": "image/webp", "form_factor": "narrow", "label": "اختر يامن أو يمنى" },
+    { "src": "assets/screenshots/narrow-islands.webp", "sizes": "1080x1920", "type": "image/webp", "form_factor": "narrow", "label": "اختر جزيرة الجمع أو الطرح أو الضرب أو القسمة" },
+    { "src": "assets/screenshots/narrow-game.webp", "sizes": "1080x1920", "type": "image/webp", "form_factor": "narrow", "label": "أجب عن الأسئلة واجمع النجوم" },
+    { "src": "assets/screenshots/wide-islands.webp", "sizes": "1920x1080", "type": "image/webp", "form_factor": "wide", "label": "جزر العمليات الحسابية" },
+    { "src": "assets/screenshots/wide-game.webp", "sizes": "1920x1080", "type": "image/webp", "form_factor": "wide", "label": "سؤال في جزيرة الضرب" }
   ]
 }

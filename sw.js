@@ -9,6 +9,7 @@ const CORE = [
   'assets/icon.svg',
   'assets/icon-192.png',
   'assets/icon-512.png',
+  'assets/icon-maskable-512.png',
   'assets/favicon-32.png',
   'assets/apple-touch-icon.png'
 ];
@@ -55,19 +56,23 @@ self.addEventListener('fetch', event => {
   else event.respondWith(url.pathname.endsWith('.mp3') ? music(req) : networkFirst(req));
 });
 
-// Game files: always take the newest copy when online, so edits and replaced
-// files show up on the next reload; the cache is only the offline fallback.
+// Game files: take the newest copy when online, so edits and replaced files
+// show up on the next reload. On a slow connection, don't keep the child
+// waiting: after a few seconds use the saved copy (the fresh one still lands
+// in the cache for next time).
+const NETWORK_WAIT = 3000;
 async function networkFirst(req) {
   const cache = await caches.open(CACHE);
-  try {
-    const res = await fetch(req, { cache: 'no-cache' });
-    if (res.ok) cache.put(req, res.clone());
+  // Every page address (shortcuts add ?island=…) is the same single page
+  const key = req.mode === 'navigate' ? new URL('./', self.registration.scope).href : req;
+  const network = fetch(req, { cache: 'no-cache' }).then(res => {
+    if (res.ok) cache.put(key, res.clone());
     return res;
-  } catch (err) {
-    const cached = await cache.match(req, { ignoreSearch: req.mode === 'navigate' });
-    if (cached) return cached;
-    throw err;
-  }
+  });
+  const cached = await cache.match(key);
+  if (!cached) return network;
+  const slow = new Promise(resolve => setTimeout(resolve, NETWORK_WAIT, cached));
+  return Promise.race([network.catch(() => cached), slow]);
 }
 
 async function cacheFirst(req) {

@@ -14,7 +14,8 @@
 - **رحلة بالسفينة** متحركة إلى الجزيرة المختارة (يمكن تخطّيها بلمسة).
 - **رمز QR** داخل اللعبة لفتحها على الجوال، ويعمل بدون إنترنت.
 - **موسيقى اختيارية** ومؤثرات صوتية، لكل منهما زر مستقل.
-- **تطبيق PWA**: يُثبَّت على الجوال ويعمل بدون إنترنت.
+- **تطبيق PWA**: يُثبَّت على الجوال والكمبيوتر ويعمل بدون إنترنت. يظهر شريط «ثبّت اللعبة» بزر واحد، ومع المتصفحات التي لا تدعم التثبيت المباشر (iPhone وiPad وSafari على Mac وFirefox) تظهر خطوات مصوّرة تناسب المتصفح.
+- **اختصارات**: اضغط مطولاً على أيقونة اللعبة المثبّتة للدخول مباشرة إلى أي جزيرة.
 - حفظ النجوم وأفضل نتيجة لكل جزيرة على الجهاز.
 
 ## التشغيل محلياً
@@ -61,6 +62,7 @@ assets/
   qrcode.js             مولّد QR (qrcode-generator, MIT)
   sound.mp3             الموسيقى
   icon.svg, *.png       الأيقونات
+  screenshots/          لقطات تظهر في نافذة التثبيت
 ```
 
 ---
@@ -79,7 +81,8 @@ An interactive math game for kids, in Arabic. The player picks a character, **Ya
 - **Animated ship voyage** to the chosen island (tap to skip).
 - **Built-in QR code** to open the game on a phone; generated on the device, so it works offline.
 - **Optional music** and sound effects, each with its own toggle.
-- **PWA**: installable and playable offline.
+- **PWA**: installable on phones and computers, playable offline. A one-tap "Install" banner appears on the menus; browsers without an install prompt (iPhone/iPad, Safari on Mac, Firefox, in-app browsers) get step-by-step instructions for that browser instead.
+- **Shortcuts**: long-press the installed icon to jump straight to any island (`?island=add|sub|mul|div|challenge`).
 - Stars and the best result per island are saved on the device.
 - Respects the system "reduce motion" setting.
 

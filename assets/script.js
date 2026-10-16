@@ -228,6 +228,7 @@ document.addEventListener('visibilitychange', () => {
 function show(id) {
   $$('.screen').forEach(x => x.classList.toggle('active', x.id === id));
   scrollTo(0, 0);
+  refreshInstallUI();
 }
 const updateScore = () => { $('#score').textContent = state.score; };
 
@@ -259,13 +260,18 @@ $('#startBtn').onclick = () => {
     sfx('bad');
     return;
   }
+  openIslands();
+  sfx('go');
+  if (pendingIsland) { travel(pendingIsland); pendingIsland = ''; }
+};
+let pendingIsland = '';
+function openIslands() {
   $('#guideFig').innerHTML = heroSVG(state.hero);
   setMood($('#guideFig'), 'wave');
   $('#helloLabel').textContent = `أهلاً يا ${hero().name}! 👋`;
   renderIslands();
   show('islands');
-  sfx('go');
-};
+}
 $('#backWelcome').onclick = () => show('welcome');
 
 /* ---------- Ship travel ---------- */
@@ -495,8 +501,8 @@ $('#qrBtn').onclick = async () => {
   }
 };
 $('#closeQr').onclick = () => $('#qrModal').classList.remove('show');
-$('#closeIos').onclick = () => $('#iosModal').classList.remove('show');
-['#qrModal', '#iosModal'].forEach(id => {
+$('#closeInstall').onclick = () => $('#installModal').classList.remove('show');
+['#qrModal', '#installModal'].forEach(id => {
   $(id).onclick = e => { if (e.target === e.currentTarget) $(id).classList.remove('show'); };
 });
 $('#copyLink').onclick = async () => {
@@ -510,39 +516,121 @@ $('#copyLink').onclick = async () => {
 addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   $('#qrModal').classList.remove('show');
-  $('#iosModal').classList.remove('show');
+  $('#installModal').classList.remove('show');
   arrive();
 });
 
-/* ---------- PWA ---------- */
+let toastTimer;
+function toast(text) {
+  const el = $('#toast');
+  el.textContent = text;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+/* ---------- PWA install ---------- */
+// Chrome, Edge and Samsung Internet offer a real install prompt. Everywhere
+// else installing is a menu item, so we show the steps for that browser.
+const ua = navigator.userAgent;
+const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const ios = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const inAppBrowser = /FBAN|FBAV|FB_IAB|Instagram|Snapchat|TikTok|musical_ly|Line\//i.test(ua);
+const macSafari = !ios && /Macintosh/.test(ua) && /Version\/(1[7-9]|[2-9]\d)\b.*Safari/.test(ua) && !/Chrome|Chromium|Edg|Firefox|OPR/.test(ua);
+const firefoxAndroid = /Android/.test(ua) && /Firefox/.test(ua);
+const SHARE_ICON = '<svg class="share-ico" viewBox="0 0 24 24" role="img" aria-label="مشاركة"><path d="M12 3v12M7.500 7.500L12 3l4.500 4.500M8 10H5v11h14V10h-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function installSteps() {
+  if (inAppBrowser) return [
+    'هذا المتصفح داخل تطبيق ولا يستطيع تثبيت اللعبة.',
+    'اضغط <b>⋯</b> أو <b>⋮</b> في الأعلى واختر <b>«فتح في المتصفح»</b>.',
+    'ثم اضغط زر <b>تثبيت</b> في اللعبة من جديد.'
+  ];
+  if (ios) return [
+    /CriOS|FxiOS|EdgiOS/.test(ua)
+      ? `اضغط زر المشاركة ${SHARE_ICON} بجانب شريط العنوان.`
+      : `اضغط زر المشاركة ${SHARE_ICON} في شريط المتصفح (أو <b>⋯</b> ثم <b>«مشاركة»</b>).`,
+    'مرّر للأسفل واختر <b>«إضافة إلى الشاشة الرئيسية»</b>.',
+    'اضغط <b>«إضافة»</b>، ثم افتح اللعبة من أيقونتها ⛵'
+  ];
+  if (macSafari) return [
+    'من قائمة <b>«ملف»</b> في أعلى الشاشة اختر <b>«إضافة إلى Dock»</b>.',
+    'اضغط <b>«إضافة»</b>، ثم افتح اللعبة من Dock.'
+  ];
+  if (firefoxAndroid) return [
+    'اضغط زر القائمة <b>⋮</b>.',
+    'اختر <b>«تثبيت»</b> أو <b>«إضافة إلى الشاشة الرئيسية»</b>.'
+  ];
+  return null;
+}
+
 let installPrompt;
+const canInstall = () => !isStandalone() && Boolean(installPrompt || installSteps());
+// Banner: on the menus only (never mid-question), and quiet for 3 days after ✕
+function refreshInstallUI() {
+  const can = canInstall();
+  const snoozed = Date.now() - (state.installSnooze || 0) < 3 * 864e5;
+  $('#installBtn').hidden = !can;
+  $('#installBar').hidden = !can || snoozed || $('#game').classList.contains('active');
+}
+
+async function install() {
+  if (installPrompt) {
+    const prompt = installPrompt;
+    installPrompt = null;   // each prompt can only be shown once
+    prompt.prompt();
+    const { outcome } = await prompt.userChoice;
+    if (outcome !== 'accepted') { state.installSnooze = Date.now(); save(); }
+    refreshInstallUI();
+    return;
+  }
+  const steps = installSteps();
+  if (!steps) return;
+  $('#installSteps').innerHTML = steps.map(s => `<li>${s}</li>`).join('');
+  $('#installModal').classList.add('show');
+  $('#closeInstall').focus();
+}
+
 addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   installPrompt = e;
-  $('#installBtn').hidden = false;
+  refreshInstallUI();
 });
-// iOS has no install prompt: show the "Add to Home Screen" steps instead
-const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-if (ios && !standalone) $('#installBtn').hidden = false;
-$('#installBtn').onclick = async () => {
-  if (!installPrompt && ios) {
-    $('#iosModal').classList.add('show');
-    $('#closeIos').focus();
-    return;
-  }
-  if (!installPrompt) return;
-  installPrompt.prompt();
-  await installPrompt.userChoice;
+$('#installBtn').onclick = install;
+$('#installBarBtn').onclick = install;
+$('#installBarClose').onclick = () => {
+  state.installSnooze = Date.now();
+  save();
+  refreshInstallUI();
+};
+// Installed apps keep their saved stars even when the device is low on space
+const keepProgress = () => { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); };
+addEventListener('appinstalled', () => {
   installPrompt = null;
   $('#installBtn').hidden = true;
-};
-addEventListener('appinstalled', () => { $('#installBtn').hidden = true; });
+  $('#installBar').hidden = true;
+  keepProgress();
+  toast('تم التثبيت! 🎉 ستجد اللعبة على الشاشة الرئيسية');
+});
+if (isStandalone()) keepProgress();
+
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  addEventListener('offline', () => {
+    if (navigator.serviceWorker.controller) toast('لا يوجد إنترنت، لا بأس! اللعبة تعمل بدونه ✓');
+  });
 }
 
 /* ---------- Start ---------- */
 updateScore();
 syncAudioButtons();
 if (HEROES[state.hero]) selectHero(state.hero, false); else state.hero = '';
+refreshInstallUI();
+
+// Home-screen shortcuts open ?island=<kind>: sail straight there
+const linkedIsland = new URLSearchParams(location.search).get('island');
+if (ISLANDS[linkedIsland]) {
+  history.replaceState(null, '', location.pathname);
+  if (state.hero) { openIslands(); travel(linkedIsland); }
+  else pendingIsland = linkedIsland;
+}

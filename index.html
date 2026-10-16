@@ -79,7 +79,7 @@
       <button class="chip" id="musicBtn" aria-pressed="false" aria-label="تشغيل أو إيقاف الموسيقى"><span class="ico">🎵</span><span class="lbl">موسيقى</span></button>
       <button class="chip" id="soundBtn" aria-pressed="true" aria-label="تشغيل أو إيقاف المؤثرات الصوتية"><span class="ico">🔊</span><span class="lbl">مؤثرات</span></button>
       <button class="chip" id="qrBtn" aria-label="مشاركة اللعبة برمز QR"><span class="ico">▦</span><span class="lbl">QR</span></button>
-      <button class="chip install" id="installBtn" hidden><span class="ico">⬇️</span><span class="lbl">تثبيت</span></button>
+      <button class="chip install" id="installBtn" aria-label="تثبيت اللعبة" hidden><span class="ico">⬇️</span><span class="lbl">تثبيت</span></button>
     </div>
   </header>
 
@@ -169,19 +169,26 @@
   </div>
 </div>
 
-<div class="modal" id="iosModal" role="dialog" aria-modal="true" aria-labelledby="iosTitle">
+<div class="modal" id="installModal" role="dialog" aria-modal="true" aria-labelledby="installTitle">
   <div class="modal-card">
-    <h2 id="iosTitle">⬇️ ثبّت اللعبة على جوالك</h2>
-    <ol class="steps">
-      <li>اضغط زر المشاركة <b>⬆️</b> في المتصفح.</li>
-      <li>اختر <b>«إضافة إلى الشاشة الرئيسية»</b>.</li>
-      <li>اضغط <b>«إضافة»</b> وافتح اللعبة من الأيقونة.</li>
-    </ol>
+    <img class="install-icon" src="assets/icon-192.png" alt="" width="72" height="72">
+    <h2 id="installTitle">ثبّت اللعبة على جهازك</h2>
+    <p class="install-why">تفتح بلمسة من الشاشة الرئيسية، بملء الشاشة، وتعمل بدون إنترنت.</p>
+    <ol class="steps" id="installSteps"></ol>
     <div class="center">
-      <button class="primary" id="closeIos">فهمت</button>
+      <button class="primary" id="closeInstall">فهمت</button>
     </div>
   </div>
 </div>
+
+<div class="install-bar" id="installBar" role="region" aria-label="تثبيت اللعبة" hidden>
+  <img src="assets/icon-192.png" alt="" width="48" height="48">
+  <p><b>ثبّت اللعبة</b><span>والعب بدون إنترنت من الشاشة الرئيسية</span></p>
+  <button class="primary" id="installBarBtn">تثبيت</button>
+  <button class="install-close" id="installBarClose" aria-label="ليس الآن">✕</button>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <div class="modal" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
   <div class="modal-card">

@@ -457,6 +457,66 @@ button.chip[aria-pressed="false"] { opacity: .7; }
 .result-fig { height: 190px; padding-top: 28px; border-radius: 24px; background: linear-gradient(180deg, #bfe9ee, #8fd6dc); aspect-ratio: auto; }
 .result-fig .hero-svg { width: auto; aspect-ratio: 2 / 3; margin: 0 auto; }
 .steps { margin: 12px 0; padding-inline-start: 24px; text-align: start; font-size: 18px; font-weight: 500; line-height: 1.9; }
+.steps li + li { margin-top: 4px; }
+.install-icon { display: block; margin: 0 auto 4px; border-radius: 18px; box-shadow: 0 5px 0 #0b4a5022; }
+.modal-card .install-why { font-size: 16px; color: #3d646c; }
+.share-ico { display: inline-block; width: 1.25em; height: 1.25em; vertical-align: -0.25em; color: #0a7aff; }
+
+/* ---------- Install banner & toast ---------- */
+.install-bar {
+  position: fixed;
+  z-index: 15;
+  left: 50%;
+  bottom: max(14px, env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(520px, calc(100% - 24px));
+  padding: 10px 12px;
+  border: 3px solid #fff;
+  border-radius: 22px;
+  background: var(--cream);
+  box-shadow: 0 12px 34px #17495433;
+  transform: translateX(-50%);
+  animation: barIn .45s cubic-bezier(.3, 1.4, .5, 1) both;
+}
+@keyframes barIn { from { transform: translate(-50%, 140%); } }
+.install-bar img { flex: none; border-radius: 13px; }
+.install-bar p { flex: 1; margin: 0; line-height: 1.3; }
+.install-bar p b { display: block; font-size: 18px; color: var(--teal); }
+.install-bar p span { font-size: 14px; color: #3d646c; font-weight: 500; }
+.install-bar .primary { flex: none; padding: 8px 20px; font-size: 18px; border-radius: 14px; }
+.install-close { flex: none; width: 44px; height: 44px; border-radius: 50%; background: #e8f5ee; color: #2c5a63; font-size: 18px; font-weight: 800; }
+
+.toast {
+  position: fixed;
+  z-index: 45;
+  top: max(14px, env(safe-area-inset-top));
+  left: 50%;
+  max-width: calc(100% - 24px);
+  padding: 10px 18px;
+  border-radius: 18px;
+  background: var(--teal);
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 10px 30px #17495440;
+  transform: translate(-50%, -160%);
+  transition: transform .35s cubic-bezier(.3, 1.4, .5, 1);
+  pointer-events: none;
+}
+.toast.show { transform: translate(-50%, 0); }
+@media (max-width: 400px) {
+  .install-bar { gap: 8px; padding: 8px; }
+  .install-bar img { width: 40px; height: 40px; }
+  .install-bar p span { font-size: 13px; }
+  .install-bar .primary { padding: 8px 14px; }
+}
+@media (orientation: landscape) and (max-height: 520px) {
+  .install-bar { bottom: max(8px, env(safe-area-inset-bottom)); padding: 6px 10px; }
+  .install-bar img { width: 36px; height: 36px; }
+  .install-bar p span { display: none; }
+}
 .qr-box { width: 220px; max-width: 100%; margin: 12px auto; }
 .qr-box:empty { display: none; }
 .qr-box svg { display: block; width: 100%; height: auto; border-radius: 14px; }
