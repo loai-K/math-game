@@ -28,7 +28,8 @@ jobs:
       - name: Collect game files
         run: |
           mkdir _site
-          cp -R index.html manifest.webmanifest sw.js assets _site/
+          cp -R index.html manifest.webmanifest sw.js sitemap.xml assets _site/
+          rm -f _site/assets/post.svg
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

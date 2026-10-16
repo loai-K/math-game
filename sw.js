@@ -1,4 +1,4 @@
-const CACHE = 'math-islands-v3';
+const CACHE = 'math-islands-v1';
 const CORE = [
   './',
   'index.html',

@@ -4,6 +4,14 @@ const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const rand = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
 const pick = arr => arr[rand(0, arr.length - 1)];
+// Fisher–Yates: sort(() => Math.random() - 0.5) favours some orders
+const shuffle = arr => {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = rand(0, i);
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+};
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
 /* ---------- Saved progress ---------- */
@@ -283,6 +291,7 @@ function travel(kind) {
   $('#ship').innerHTML = shipSVG(state.hero, ISLANDS[kind].sign);
   setMood($('#ship'), 'wave');
   $('#shipScene').classList.add('show');
+  document.body.classList.add('travelling');
   sfx('sail');
   travelTimer = setTimeout(arrive, reducedMotion.matches ? 1200 : 3600);
 }
@@ -291,6 +300,7 @@ function arrive() {
   const scene = $('#shipScene');
   if (!scene.classList.contains('show')) return;
   scene.classList.remove('show');
+  document.body.classList.remove('travelling');
   $('#ship').innerHTML = '';
   startGame(activeIsland);
 }
@@ -303,18 +313,42 @@ function makeQuestion(kind) {
   else if (kind === 'sub') { a = rand(15, 60); b = rand(2, a - 1); ans = a - b; op = '−'; }
   else if (kind === 'mul') { a = rand(2, 12); b = rand(2, 10); ans = a * b; op = '×'; }
   else { b = rand(2, 10); ans = rand(2, 12); a = b * ans; op = '÷'; }
-  return { a, b, ans, op };
+  return { a, b, ans, op, kind };
 }
-function makeOptions(ans) {
+// No question twice in one round
+function makeRound(kinds) {
+  const seen = new Set();
+  return kinds.map(kind => {
+    let q;
+    for (let tries = 0; tries < 20; tries++) {
+      q = makeQuestion(kind);
+      if (!seen.has(`${q.a}${q.op}${q.b}`)) break;
+    }
+    seen.add(`${q.a}${q.op}${q.b}`);
+    return q;
+  });
+}
+// Wrong options a child might actually pick: off by one or ten, a neighbouring
+// times-table fact, or the wrong operation, topped up with random near misses.
+function makeOptions({ a, b, ans, kind }) {
+  const likely = {
+    add: [ans + 1, ans - 1, ans + 10, ans - 10, Math.abs(a - b)],
+    sub: [ans + 1, ans - 1, ans + 10, ans - 10, a + b],
+    mul: [a * (b + 1), a * (b - 1), (a + 1) * b, (a - 1) * b, a + b],
+    div: [ans + 1, ans - 1, ans + 2, ans - 2, b]
+  }[kind];
   const opts = new Set([ans]);
+  for (const n of shuffle(likely.filter(n => n > 0 && n !== ans))) {
+    if (opts.size < 3) opts.add(n);
+  }
   while (opts.size < 4) {
     const delta = rand(1, Math.max(5, Math.floor(ans * 0.35)));
     opts.add(Math.random() > 0.5 ? ans + delta : Math.max(0, ans - delta));
   }
-  return [...opts].sort(() => Math.random() - 0.5);
+  return shuffle([...opts]);
 }
 
-let questions = [], qIndex = 0, session = 0, locked = false, nextTimer;
+let questions = [], qIndex = 0, session = 0, streak = 0, locked = false, nextTimer;
 const say = text => {
   const bubble = $('#bubble');
   bubble.textContent = text;
@@ -326,10 +360,10 @@ const say = text => {
 function startGame(kind) {
   activeIsland = kind;
   session = 0;
+  streak = 0;
   qIndex = 0;
-  questions = kind === 'challenge'
-    ? Array.from({ length: 8 }, (_, i) => makeQuestion(OPS[i % 4]))
-    : Array.from({ length: 5 }, () => makeQuestion(kind));
+  $('#confetti').innerHTML = '';
+  questions = makeRound(kind === 'challenge' ? shuffle([...OPS, ...OPS]) : Array(5).fill(kind));
   $('#islandName').textContent = `${kind === 'challenge' ? '🏆' : '🏝️'} ${ISLANDS[kind].name}`;
   $('#sessionScore').textContent = 0;
   $('#sidekickFig').innerHTML = heroSVG(state.hero);
@@ -350,7 +384,7 @@ function nextQuestion() {
   box.classList.remove('pop');
   void box.offsetWidth;
   box.classList.add('pop');
-  $('#answers').innerHTML = makeOptions(q.ans)
+  $('#answers').innerHTML = makeOptions(q)
     .map((n, i) => `<button class="answer" data-value="${n}" style="--i:${i}">${n}</button>`).join('');
   $$('.answer').forEach(b => { b.onclick = () => answer(b, q); });
   if (qIndex > 0) say(pick(['ما الجواب يا ترى؟ 🤔', 'فكّر جيداً…', 'السؤال التالي!', 'نقترب من الكنز! 🗝️']));
@@ -363,6 +397,7 @@ function answer(btn, q) {
   if (ok) {
     btn.classList.add('correct');
     session++;
+    streak++;
     state.score++;
     save();
     updateScore();
@@ -370,10 +405,13 @@ function answer(btn, q) {
     $('.badge').classList.remove('bump');
     void $('.badge').offsetWidth;
     $('.badge').classList.add('bump');
-    say(pick(['إجابة رائعة! ✨', `${g('بطل', 'بطلة')}! أحسنت 🎉`, 'ممتاز! 🌟', 'يا سلام! 👏']));
+    say(streak >= 3
+      ? `${streak} إجابات صحيحة متتالية! 🔥`
+      : pick(['إجابة رائعة! ✨', `${g('بطل', 'بطلة')}! أحسنت 🎉`, 'ممتاز! 🌟', 'يا سلام! 👏']));
     setMood($('#sidekickFig'), 'happy', 1200);
     sfx('good');
   } else {
+    streak = 0;
     btn.classList.add('wrong');
     $$('.answer').forEach(x => { if (Number(x.dataset.value) === q.ans) x.classList.add('correct'); });
     say(`قريب! الجواب ${q.ans} 💪`);
@@ -425,23 +463,36 @@ function confetti() {
 }
 
 /* ---------- QR share ---------- */
-$('#qrBtn').onclick = () => {
+// The QR library is only needed here, so load it on first use (the service
+// worker still caches it for offline play).
+let qrLib;
+const loadQR = () => qrLib || (qrLib = new Promise((resolve, reject) => {
+  const s = document.createElement('script');
+  s.src = 'assets/qrcode.js';
+  s.onload = () => resolve(window.qrcode);
+  s.onerror = () => { qrLib = null; s.remove(); reject(); };
+  document.head.append(s);
+}));
+$('#qrBtn').onclick = async () => {
   const url = location.href.split('#')[0];
   const web = location.protocol.startsWith('http') && !/^(localhost|127\.|\[::1\])/.test(location.host);
   const box = $('#qrBox');
   box.innerHTML = '';
-  if (web && window.qrcode) {
-    const qr = qrcode(0, 'M');
-    qr.addData(url);
-    qr.make();
-    box.innerHTML = qr.createSvgTag({ cellSize: 6, margin: 12, scalable: true });
-    $('#qrMessage').textContent = 'امسح الرمز بكاميرا الجوال لفتح اللعبة مباشرة.';
-  } else {
-    $('#qrMessage').textContent = 'رمز QR يعمل بعد نشر اللعبة على رابط عام (مثل GitHub Pages) وفتحها من ذلك الرابط.';
-  }
+  $('#qrMessage').textContent = web
+    ? 'امسح الرمز بكاميرا الجوال لفتح اللعبة مباشرة.'
+    : 'رمز QR يعمل بعد نشر اللعبة على رابط عام (مثل GitHub Pages) وفتحها من ذلك الرابط.';
   $('#copyLink').textContent = 'نسخ رابط اللعبة';
   $('#qrModal').classList.add('show');
   $('#closeQr').focus();
+  if (!web) return;
+  try {
+    const qr = (await loadQR())(0, 'M');
+    qr.addData(url);
+    qr.make();
+    box.innerHTML = qr.createSvgTag({ cellSize: 6, margin: 12, scalable: true });
+  } catch (e) {
+    $('#qrMessage').textContent = 'تعذّر إنشاء الرمز، استخدم زر نسخ الرابط.';
+  }
 };
 $('#closeQr').onclick = () => $('#qrModal').classList.remove('show');
 $('#closeIos').onclick = () => $('#iosModal').classList.remove('show');

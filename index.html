@@ -5,12 +5,54 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
 <meta name="theme-color" content="#075b67">
-<meta name="description" content="رحلة أبطال الرياضيات: لعبة تفاعلية للأطفال لتعلّم الجمع والطرح والضرب والقسمة مع يامن ويمنى.">
+<meta name="description" content="لعبة رياضيات تعليمية مجانية للأطفال باللغة العربية: تعلّم الجمع والطرح والضرب والقسمة في رحلة بحرية مع يامن ويمنى. تعمل على الجوال والكمبيوتر وبدون إنترنت.">
+<meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="أبطال الرياضيات">
-<title>رحلة أبطال الرياضيات</title>
+<title>رحلة أبطال الرياضيات | لعبة رياضيات تعليمية للأطفال</title>
+<link rel="canonical" href="https://loai-k.github.io/math-game/">
+
+<!-- Link previews (WhatsApp, Facebook, X, Telegram…) need absolute URLs -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="رحلة أبطال الرياضيات">
+<meta property="og:locale" content="ar_AR">
+<meta property="og:url" content="https://loai-k.github.io/math-game/">
+<meta property="og:title" content="رحلة أبطال الرياضيات: لعبة رياضيات للأطفال">
+<meta property="og:description" content="أبحر مع يامن ويمنى واكتشف جزر الجمع والطرح والضرب والقسمة. لعبة مجانية على الجوال والكمبيوتر.">
+<meta property="og:image" content="https://loai-k.github.io/math-game/assets/post.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="سفينة تبحر نحو جزيرة، بجانبها عنوان اللعبة ورموز العمليات الحسابية الأربع">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="رحلة أبطال الرياضيات: لعبة رياضيات للأطفال">
+<meta name="twitter:description" content="أبحر مع يامن ويمنى واكتشف جزر الجمع والطرح والضرب والقسمة.">
+<meta name="twitter:image" content="https://loai-k.github.io/math-game/assets/post.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["VideoGame", "WebApplication"],
+  "name": "رحلة أبطال الرياضيات",
+  "alternateName": "Math Heroes Journey",
+  "url": "https://loai-k.github.io/math-game/",
+  "image": "https://loai-k.github.io/math-game/assets/post.png",
+  "description": "لعبة رياضيات تعليمية مجانية للأطفال باللغة العربية لتعلّم الجمع والطرح والضرب والقسمة.",
+  "inLanguage": "ar",
+  "genre": ["Educational", "Math"],
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any",
+  "gamePlatform": ["Web browser", "Android", "iOS"],
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "audience": { "@type": "PeopleAudience", "suggestedMinAge": 5, "suggestedMaxAge": 11 },
+  "educationalUse": "practice",
+  "teaches": ["الجمع", "الطرح", "الضرب", "القسمة"],
+  "author": { "@type": "Person", "name": "Loai Kanou" },
+  "license": "https://opensource.org/licenses/MIT"
+}
+</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
@@ -75,7 +117,7 @@
           <span class="hero-figure small" id="guideFig"></span>
           <span class="bubble" id="helloLabel">يا هلا!</span>
         </div>
-        <h1>إلى أين نبحر اليوم؟</h1>
+        <h2>إلى أين نبحر اليوم؟</h2>
         <p>اختر جزيرتك، وكل إجابة صحيحة تقرّبك من الكنز!</p>
       </div>
       <div class="island-grid" id="islandGrid"></div>
@@ -101,6 +143,9 @@
       </div>
     </section>
   </main>
+  <noscript>
+    <p class="noscript">رحلة أبطال الرياضيات لعبة تعليمية للأطفال لتعلّم الجمع والطرح والضرب والقسمة. فعّل JavaScript في المتصفح لتبدأ اللعب.</p>
+  </noscript>
 </div>
 
 <div class="ship-scene" id="shipScene" aria-hidden="true">
@@ -154,7 +199,6 @@
 <div class="confetti" id="confetti" aria-hidden="true"></div>
 <audio id="bgm" src="assets/sound.mp3" loop preload="none"></audio>
 
-<script src="assets/qrcode.js" defer></script>
 <script src="assets/script.js" defer></script>
 </body>
 </html>

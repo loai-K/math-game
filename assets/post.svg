@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">رحلة أبطال الرياضيات</title>
+  <desc id="description">مغامرة رياضيات عربية للأطفال، في رحلة بحرية إلى جزر الجمع والطرح والضرب والقسمة.</desc>
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1">
+      <stop stop-color="#80d8df"/>
+      <stop offset="1" stop-color="#d8f2df"/>
+    </linearGradient>
+    <linearGradient id="water" x2="0" y2="1">
+      <stop stop-color="#39b5b0"/>
+      <stop offset="1" stop-color="#08717a"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="9" stdDeviation="10" flood-color="#174954" flood-opacity=".16"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#sky)"/>
+  <circle cx="130" cy="112" r="54" fill="#ffe693"/>
+  <circle cx="130" cy="112" r="75" fill="#ffe693" opacity=".25"/>
+  <g fill="#fff" opacity=".8">
+    <ellipse cx="380" cy="112" rx="54" ry="16"/><circle cx="360" cy="101" r="24"/><circle cx="393" cy="96" r="30"/>
+    <ellipse cx="655" cy="166" rx="43" ry="13"/><circle cx="641" cy="157" r="19"/><circle cx="666" cy="150" r="23"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="656" y="65" width="490" height="500" rx="18" fill="#fffdf5"/>
+    <rect x="1000" y="96" width="112" height="40" rx="20" fill="#fff1c6"/>
+    <text x="1056" y="123" text-anchor="middle" font-family="Baloo Bhaijaan 2, Geeza Pro, sans-serif" font-size="20" font-weight="700" fill="#99641d" direction="rtl">مغامرة تعليمية</text>
+    <text x="950" y="206" text-anchor="middle" font-family="Baloo Bhaijaan 2, Geeza Pro, sans-serif" font-size="54" font-weight="800" fill="#075b67" direction="rtl">رحلة أبطال</text>
+    <text x="950" y="270" text-anchor="middle" font-family="Baloo Bhaijaan 2, Geeza Pro, sans-serif" font-size="58" font-weight="800" fill="#075b67" direction="rtl">الرياضيات</text>
+    <path d="M804 292h290" stroke="#ffd264" stroke-width="7" stroke-linecap="round"/>
+    <text x="950" y="339" text-anchor="middle" font-family="Baloo Bhaijaan 2, Geeza Pro, sans-serif" font-size="26" font-weight="700" fill="#315a61" direction="rtl">أبحر مع يامن ويمنى</text>
+    <text x="950" y="378" text-anchor="middle" font-family="Baloo Bhaijaan 2, Geeza Pro, sans-serif" font-size="23" font-weight="500" fill="#315a61" direction="rtl">واكتشف جزر العمليات الحسابية</text>
+    <g font-family="Baloo Bhaijaan 2, Geeza Pro, sans-serif" font-size="23" font-weight="800" text-anchor="middle">
+      <rect x="1008" y="402" width="56" height="48" rx="12" fill="#e4f5ed"/><text x="1036" y="436" fill="#08717a">÷</text>
+      <rect x="939" y="402" width="56" height="48" rx="12" fill="#fff1c6"/><text x="967" y="436" fill="#99641d">×</text>
+      <rect x="870" y="402" width="56" height="48" rx="12" fill="#ffebe4"/><text x="898" y="436" fill="#d65d50">−</text>
+      <rect x="801" y="402" width="56" height="48" rx="12" fill="#e4f5ed"/><text x="829" y="436" fill="#08717a">+</text>
+    </g>
+    <rect x="804" y="475" width="291" height="58" rx="15" fill="#ff7c67"/>
+    <text x="950" y="513" text-anchor="middle" font-family="Baloo Bhaijaan 2, Geeza Pro, sans-serif" font-size="24" font-weight="800" fill="#fff" direction="rtl">ابدأ المغامرة الآن</text>
+    <text x="950" y="551" text-anchor="middle" font-family="Baloo Bhaijaan 2, Geeza Pro, sans-serif" font-size="16" font-weight="700" fill="#315a61" direction="rtl">على الجوال والكمبيوتر</text>
+  </g>
+
+  <g>
+    <path d="M0 450Q84 420 166 450T332 450T498 450T664 450V630H0Z" fill="#64cfc5"/>
+    <path d="M0 485Q84 455 166 485T332 485T498 485T664 485V630H0Z" fill="url(#water)"/>
+    <path d="M0 555Q84 525 166 555T332 555T498 555T664 555V630H0Z" fill="#075b67" opacity=".55"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <path d="M104 373Q133 304 215 295Q292 302 326 373Z" fill="#7ec98b"/>
+    <path d="M159 316q18-37 36 0q18-37 36 0q18-37 36 0" fill="none" stroke="#fffdf5" stroke-width="10" stroke-linecap="round"/>
+    <path d="M225 299v-116" stroke="#7a3b2e" stroke-width="10" stroke-linecap="round"/>
+    <path d="M220 188L147 254H220Z" fill="#ffd264"/>
+    <path d="M231 211L290 263H231Z" fill="#fffdf5"/>
+    <path d="M133 373h188q-15 48-94 57-77-9-94-57Z" fill="#a85f35"/>
+    <rect x="119" y="365" width="218" height="17" rx="8" fill="#c77d48"/>
+    <path d="M215 183l-5-16 9 7 8-9-2 18Z" fill="#c62f3a"/>
+  </g>
+
+  <g font-family="Baloo Bhaijaan 2, Geeza Pro, sans-serif" font-weight="800" text-anchor="middle" filter="url(#shadow)">
+    <circle cx="104" cy="475" r="29" fill="#fffdf5"/><text x="104" y="485" font-size="31" fill="#d65d50">+</text>
+    <circle cx="333" cy="469" r="29" fill="#fffdf5"/><text x="333" y="480" font-size="28" fill="#08717a">×</text>
+    <circle cx="535" cy="405" r="29" fill="#fffdf5"/><text x="535" y="416" font-size="30" fill="#99641d">÷</text>
+  </g>
+  <g fill="#fffdf5">
+    <path d="M423 268l6 13 14 2-10 9 3 14-13-7-12 7 2-14-10-9 14-2Z"/>
+    <path d="M525 151l4 9 10 1-7 7 2 10-9-5-9 5 2-10-7-7 10-1Z" opacity=".8"/>
+  </g>
+  <text x="332" y="594" text-anchor="middle" font-family="Baloo Bhaijaan 2, Geeza Pro, sans-serif" font-size="18" font-weight="700" fill="#fffdf5" direction="rtl">متعة التعلّم تبدأ برحلة!</text>
+</svg>
